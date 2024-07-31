@@ -76,20 +76,7 @@ public class Listeners implements Listener {
 
         new BukkitRunnable() {
             public void run() {
-                /*if(!target.isOnline() || !zombie.isValid() || !zombie.isLeashed() || !leashed.contains(target)) {
-                    leashed.remove(target);
-                    entityList.remove(zombie);
-                    zombie.remove();
-                    target.setAllowFlight(false);
-                    if(!distanceUnleash.contains(zombie))
-                        target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
-                    else
-                        distanceUnleash.remove(zombie);
-                    cancel();
-                }*/
-
                 // make sure the zombie follows the player by tping it
-
                 leashedZombie.teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                 Location holderLoc = holder.getLocation();
