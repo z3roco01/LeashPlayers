@@ -101,11 +101,10 @@ public class Listeners implements Listener {
                 // if the leashed player is too far, or the leasher or leashee is disconnected or the zombie is no longer valid
                 // then unleash the player and kill the zombie
                 if(distToHolder > main.getConfig().getDouble("Max-Leash-Distance") || !target.isOnline() || !leashedZombie.isValid() || !leashedZombie.isLeashed() || !holder.isOnline() || playerUnleash.contains(leashedZombie)) {
+                    leashed.remove(target);
+                    entityList.remove(leashedZombie);
+                    leashedZombie.remove();
                     target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
-                    // unleash the zombie
-                    leashedZombie.setLeashHolder(null);
-                    // kill the zombie
-                    leashedZombie.setHealth(0);
 
                     // If not in creative do not allow flight anymore
                     if(target.getGameMode() != GameMode.CREATIVE)
