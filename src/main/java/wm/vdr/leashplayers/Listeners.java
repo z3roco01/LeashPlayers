@@ -122,9 +122,9 @@ public class Listeners implements Listener {
                 double dy = (holderLoc.getY() - targetLoc.getY()) / distToHolder;
                 double dz = (holderLoc.getZ() - targetLoc.getZ()) / distToHolder;
 
-                double vx = Math.copySign(dx*dx*(0.4d), dx);
-                double vy = Math.copySign(dy*dy*(0.4d), dy);
-                double vz = Math.copySign(dz*dz*(0.4d), dz);
+                double vx = Math.copySign(dx*dx*0.4d, dx);
+                double vy = Math.copySign(dy*dy*0.4d, dy);
+                double vz = Math.copySign(dz*dz*0.4d, dz);
 
                 addVel(target,
                         vx,
