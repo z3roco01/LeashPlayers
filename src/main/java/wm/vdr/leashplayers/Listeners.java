@@ -30,7 +30,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onUnleash(EntityUnleashEvent e) {
-        if(e.getReason() != UnleashReason.PLAYER_UNLEASH) return;
+        if(e.getReason() != UnleashReason.PLAYER_UNLEASH || e.getReason() != UnleashReason.HOLDER_GONE) return;
         playerUnleash.add(e.getEntity());
     }
 
@@ -73,7 +73,6 @@ public class Listeners implements Listener {
         entityList.add(leashedZombie);
 
         holder.getInventory().getItemInMainHand().setAmount(holder.getInventory().getItemInMainHand().getAmount() - 1);
-        //((CraftPlayer)player).getHandle().a(EnumHand.a, true);
 
         new BukkitRunnable() {
             public void run() {
@@ -90,16 +89,15 @@ public class Listeners implements Listener {
                 }*/
 
                 // make sure the zombie follows the player by tping it
+
                 leashedZombie.teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
                 Location holderLoc = holder.getLocation();
                 Location targetLoc = target.getLocation();
 
                 double distToHolder = target.getLocation().distance(holder.getLocation());
-                if(distToHolder < main.getConfig().getDouble("Min-Pull-Distance"))
-                    return;
                 // if the leashed player is too far, or the leasher or leashee is disconnected or the zombie is no longer valid
-                // then unleash the player and kill the zombie
+                // then unleash the player and remove the zombie
                 if(distToHolder > main.getConfig().getDouble("Max-Leash-Distance") || !target.isOnline() || !leashedZombie.isValid() || !leashedZombie.isLeashed() || !holder.isOnline() || playerUnleash.contains(leashedZombie)) {
                     leashed.remove(target);
                     entityList.remove(leashedZombie);
@@ -111,7 +109,14 @@ public class Listeners implements Listener {
                         target.setAllowFlight(false);
 
                     cancel();
+                    return;
                 }
+
+                if(distToHolder < main.getConfig().getDouble("Min-Pull-Distance"))
+                    return;
+
+                if(!leashed.contains(target))
+                    return;
 
                 double dx = (holderLoc.getX() - targetLoc.getX()) / distToHolder;
                 double dy = (holderLoc.getY() - targetLoc.getY()) / distToHolder;
